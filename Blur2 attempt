@@ -1,0 +1,49 @@
+class Image
+  attr_accessor :image
+
+  def initialize(array)
+    @image = array
+  end
+
+  def find_the_ones!
+    find_the_ones = []
+    @image.each_with_index do |row, row_number|
+      row.each_with_index do |pixel, column_number|
+          find_the_ones << [row_number, column_number] if pixel == 1
+        end
+      end
+
+    find_the_ones.each do |one_location|
+      @image[one_location[0]][one_location[1] + 1] = 1 if one_location[1] + 1 <= @image[one_location[0]].length - 1
+      @image[one_location[0]][one_location[1] - 1] = 1 if one_location[1] - 1 >= 0
+      @image[one_location[0] + 1][one_location[1]] = 1 if one_location[0] + 1 <= @image.length - 1
+      @image[one_location[0] - 1][one_location[1]] = 1 if one_location[0] - 1 >= 0
+      end
+    end
+
+  def output_image
+    @image.each do |row|
+      puts row.join
+    end
+  end
+
+  def blur!(distance)
+    distance.times do 
+      find_the_ones!
+    end
+  end
+
+end
+
+image = Image.new([
+  [0, 0, 0, 0],
+  [0, 1, 0, 0],
+  [0, 0, 0, 1],
+  [0, 0, 0, 0]
+])
+
+puts "Original Image"
+image.output_image
+puts "Blur Image"
+image.blur!(1)
+image.output_image
